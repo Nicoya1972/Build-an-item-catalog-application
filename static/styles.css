@@ -1,0 +1,114 @@
+a:link, a:visited, a:hover {
+	text-decoration: none;
+	color: orangered;
+}
+
+header {
+	text-align: center;
+	background-color: darkblue;
+	border-top: 0.5px solid gray;
+	border-top-left-radius: 25px;
+	border-top-right-radius: 25px;
+	padding: 15px;
+}
+ul,li{
+	list-style-type: none;
+	margin:0px;
+	padding:0px;
+}
+li:link{
+	color:orangered;
+}
+
+nav {
+	float: left;
+	max-width: 250px;
+	margin: 0;
+	padding: 1em;
+	/*border-right: 2px solid gray;*/
+}
+
+article {
+	padding-left: 300px;
+	padding-top: 20px;
+	min-height: 428px;
+}
+
+body {
+	position: absolute;
+	left: 10%;
+	right: 10%;
+	border: 2px solid;
+	border-radius: 25px;
+	/*padding: 5px;*/
+	margin: 5px;
+	color: dimgrey;
+	/*border-color: #999999;*/
+	font-family: 'arial';
+	font-size: 22px;
+}
+
+.flash {
+	text-align: center;
+	color: orangered;
+}
+
+.inline {
+	padding-top: 20px;
+	display: inline;
+}
+
+.item {
+	text-align: center;
+	padding-top: 10px;
+}
+
+.description {
+	max-width: 80%;
+	text-align-last: auto;
+	padding-left: 10%;
+}
+
+.button {
+	background-color: white;
+	color: black;
+	border: 2px solid #555555;
+	border-radius: 12px;
+	padding: 8px 28px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 18px;
+	margin: 4px 2px;
+	-webkit-transition-duration: 0.5s;
+	transition-duration: 0.5s;
+	cursor: pointer;
+}
+
+.button:hover {
+	background-color: orangered;
+	color: white;
+	text-decoration: none;
+}
+
+.login {
+	float: right;
+}
+
+.logo {
+	float: left;
+	padding-left: 30px;
+}
+
+.loginpage {
+	text-align: center;
+	min-height: 550px;
+}
+
+.maxheight {
+	max-height: 400px;
+}
+
+.minheight {
+	min-height: 428px;
+}
