@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+# This modules contains all the routes for the functioning
+# of the application.
 from flask import Flask, render_template, request, redirect
 from flask import jsonify, url_for, flash, g
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Categories, CategoryItem, User
+from database_setup import Base, Categories, Item, User
 from flask import session as login_session
 from functools import wraps
 import random
@@ -15,18 +18,23 @@ from flask import make_response
 import requests
 
 app = Flask(__name__)
+
+# Load the Google Sign-in API Client ID.
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog Application"
 
+# Connect to the database and create a database session.
 engine = create_engine('sqlite:///catalogs.db')
 Base.metadata.bind = engine
 
+# Bind the above engine to a session.
 DBSession = sessionmaker(bind=engine)
+
+# Create a Session object.
 session = DBSession()
 
-
-# Create anti-forgery state token for the login session
+# Redirect to login page and create anti-forgery state token for the login session
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -36,6 +44,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+# Connect to the Google Sign-in oAuth method.
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -195,14 +204,14 @@ def catalogJSON():
 @app.route('/catalog/<int:categories_id>/JSON')
 def categoryJSON(categories_id):
     categories = session.query(Categories).filter_by(id=categories_id).one()
-    items = session.query(CategoryItem).filter_by(categories_id=categories.id)
-    return jsonify(CategoryItem=[i.serialize for i in items])
+    items = session.query(Item).filter_by(categories_id=categories.id)
+    return jsonify(Item=[i.serialize for i in items])
 
 
 @app.route('/catalog/<int:categories_id>/<int:items_id>/JSON')
 def itemJSON(categories_id, items_id):
     categories = session.query(Categories).filter_by(id=categories_id).one()
-    items = session.query(CategoryItem).filter_by(id=items_id).one()
+    items = session.query(Item).filter_by(id=items_id).one()
     return jsonify(ItemDetails=[items.serialize])
 
 
@@ -223,8 +232,8 @@ def login_required(f):
 @app.route('/catalog')
 def showCatalog():
     categories = session.query(Categories).all()
-    items = session.query(CategoryItem).order_by(
-        CategoryItem.id.desc()).limit(10)
+    items = session.query(Item).order_by(
+        Item.id.desc()).limit(10)
     if 'username' not in login_session:  # make sure user has logined
         return render_template('publiccatalog.html', categories=categories,
                                items=items)
@@ -238,7 +247,7 @@ def showCatalog():
 @login_required
 def newItem():
     if request.method == 'POST':  # get data from the form
-        newItem = CategoryItem(name=request.form['name'],
+        newItem = Item(name=request.form['name'],
                                description=request.form['description'],
                                categories_id=request.form['categories_id'],
                                user_id=login_session['user_id'])
@@ -255,7 +264,7 @@ def newItem():
 def showCategories(categories_id):
     allcategories = session.query(Categories).all()
     categories = session.query(Categories).filter_by(id=categories_id).one()
-    items = session.query(CategoryItem).filter_by(categories_id=categories.id)
+    items = session.query(Item).filter_by(categories_id=categories.id)
     return render_template('category.html', categories=categories, items=items,
                            allcategories=allcategories)
 
@@ -264,7 +273,7 @@ def showCategories(categories_id):
 @app.route('/catalog/<int:categories_id>/<int:items_id>')
 def showItem(categories_id, items_id):
     categories = session.query(Categories).filter_by(id=categories_id).one()
-    items = session.query(CategoryItem).filter_by(id=items_id).one()
+    items = session.query(Item).filter_by(id=items_id).one()
     if 'username' not in login_session or \
             items.user_id != login_session['user_id']:
         # make sure user logined and user is the creator
@@ -279,7 +288,7 @@ def showItem(categories_id, items_id):
            methods=['GET', 'POST'])
 @login_required
 def editItem(categories_id, items_id):
-    editedItem = session.query(CategoryItem).filter_by(id=items_id).one()
+    editedItem = session.query(Item).filter_by(id=items_id).one()
     # make sure user is the creator
     if editedItem.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized"\
@@ -318,7 +327,7 @@ def editItem(categories_id, items_id):
            methods=['GET', 'POST'])
 @login_required
 def deleteItem(categories_id, items_id):
-    itemToDelete = session.query(CategoryItem).filter_by(id=items_id).one()
+    itemToDelete = session.query(Item).filter_by(id=items_id).one()
     # make sure user is the creator
     if itemToDelete.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized "\
@@ -335,11 +344,12 @@ def deleteItem(categories_id, items_id):
 
 
 # disconnect from the login session
+@app.route('/logout')
 @app.route('/disconnect')
 def disconnect():
     if 'username' in login_session:
         gdisconnect()
-        flash("You have successfully been logged out.")        
+        flash("You have successfully been logged out.")
         return redirect(url_for('showCatalog'))
     else:
         flash("You were not logged in")

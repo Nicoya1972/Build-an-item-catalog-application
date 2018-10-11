@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# Module to set up database.
 import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String
@@ -9,6 +11,7 @@ Base = declarative_base()
 
 
 class User(Base):
+    """Class to create the table 'user'"""
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
@@ -16,6 +19,7 @@ class User(Base):
 
 
 class Categories(Base):
+    """Class to create the table 'category'"""
     __tablename__ = 'categories'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
@@ -24,14 +28,15 @@ class Categories(Base):
 
     @property
     def serialize(self):
+        """Return object data in easily serializeable format"""
         return {
             'name': self.name,
             'id': self.id,
         }
 
 
-class CategoryItem(Base):
-    __tablename__ = 'category_item'
+class Item(Base):
+    __tablename__ = 'item'
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
@@ -42,6 +47,7 @@ class CategoryItem(Base):
 
     @property
     def serialize(self):
+        """Return object data in easily serializeable format"""
         return {
             'name': self.name,
             'description': self.description,

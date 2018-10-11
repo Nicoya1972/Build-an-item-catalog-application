@@ -4,7 +4,7 @@
   <ul>
     {% for i in categories %}
     <li>
-      <a href = "{{url_for('showCategories', categories_id = i.id)}}">{{i.name}}</a>
+      <a href = "{{url_for('showCategories', categories_id = i.id)}}"style="color:dimgrey">{{i.name}}</a>
     </li>
     {% endfor %}
   </ul>
@@ -14,7 +14,8 @@
   <ul>
     {% for i in items %}
     <li>
-      <a href = "{{url_for('showItem',categories_id=i.categories_id, items_id=i.id)}}">{{i.name}} - {{i.categories.name}}</a>
+      <a href = "{{url_for('showItem',categories_id=i.categories_id, items_id=i.id)}}"
+        style="color:dimgrey">{{i.name}} - {{i.categories.name}}</a>
     </li>
     {% endfor %}
   </ul>

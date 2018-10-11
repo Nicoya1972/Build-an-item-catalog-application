@@ -1,6 +1,6 @@
 a:link, a:visited, a:hover {
 	text-decoration: none;
-	color: orangered;
+	/*color: orangered;*/
 }
 
 header {
@@ -25,7 +25,6 @@ nav {
 	max-width: 250px;
 	margin: 0;
 	padding: 1em;
-	/*border-right: 2px solid gray;*/
 }
 
 article {
@@ -40,10 +39,8 @@ body {
 	right: 10%;
 	border: 2px solid;
 	border-radius: 25px;
-	/*padding: 5px;*/
 	margin: 5px;
 	color: dimgrey;
-	/*border-color: #999999;*/
 	font-family: 'arial';
 	font-size: 22px;
 }
