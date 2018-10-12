@@ -54,6 +54,7 @@ class Item(Base):
             'id': self.id,
         }
 
+
 engine = create_engine('sqlite:///catalogs.db')
 
 

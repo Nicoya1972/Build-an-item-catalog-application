@@ -100,7 +100,8 @@ session.add(item3)
 session.commit()
 
 item4 = Item(user_id=1, name="Jogging pant",
-                             description="A very confortable pant for practising yoga ",
+                             description="A very confortable pant\
+                             for practising yoga ",
                              categories=category4)
 session.add(item4)
 session.commit()
@@ -112,13 +113,15 @@ session.add(item5)
 session.commit()
 
 item6 = Item(user_id=1, name="Skate board",
-                             description="Very light board for skating everywhere",
+                             description="Very light board for\
+                             skating everywhere",
                              categories=category6)
 session.add(item6)
 session.commit()
 
 item7 = Item(user_id=1, name="Swim suit",
-                             description="A swim suit for swimming with all the confort",
+                             description="A swim suit for swimming\
+                             with all the confort",
                              categories=category7)
 session.add(item7)
 session.commit()
@@ -136,14 +139,15 @@ session.add(item9)
 session.commit()
 
 item10 = Item(user_id=1, name="Hockey stick",
-                             description="A quality wood hockey stick to practice this sport",
-                             categories=category10)
+                              description="A quality wood hockey stick\
+                              to practice this sport",
+                              categories=category10)
 session.add(item10)
 session.commit()
 
 item11 = Item(user_id=1, name="Snow board",
-                             description="To practice this sport",
-                             categories=category11)
+                              description="To practice this sport",
+                              categories=category11)
 session.add(item11)
 session.commit()
 

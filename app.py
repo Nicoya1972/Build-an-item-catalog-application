@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # This modules contains all the routes for the functioning
 # of the application.
+
 from flask import Flask, render_template, request, redirect
 from flask import jsonify, url_for, flash, g
 from sqlalchemy import create_engine, asc
@@ -34,7 +35,10 @@ DBSession = sessionmaker(bind=engine)
 # Create a Session object.
 session = DBSession()
 
-# Redirect to login page and create anti-forgery state token for the login session
+# Redirect to login page and create anti-forgery
+# state token for the login session
+
+
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -176,20 +180,12 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
 
     if result['status'] == '200':
-        # Reset the user's sesson.
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
-
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        # If the given token was invalid notice the user.
         response = make_response(
-            json.dumps('Failed to revoke token for given user.', 400))
+            json.dumps('Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -248,9 +244,9 @@ def showCatalog():
 def newItem():
     if request.method == 'POST':  # get data from the form
         newItem = Item(name=request.form['name'],
-                               description=request.form['description'],
-                               categories_id=request.form['categories_id'],
-                               user_id=login_session['user_id'])
+                       description=request.form['description'],
+                       categories_id=request.form['categories_id'],
+                       user_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         flash("new sport item created!")
@@ -345,15 +341,21 @@ def deleteItem(categories_id, items_id):
 
 # disconnect from the login session
 @app.route('/logout')
-@app.route('/disconnect')
-def disconnect():
+def logout():
     if 'username' in login_session:
         gdisconnect()
-        flash("You have successfully been logged out.")
+        del login_session['gplus_id']
+        del login_session['access_token']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        del login_session['user_id']
+        flash("You have been successfully logged out!")
         return redirect(url_for('showCatalog'))
     else:
-        flash("You were not logged in")
+        flash("You were not logged in!")
         return redirect(url_for('showCatalog'))
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
